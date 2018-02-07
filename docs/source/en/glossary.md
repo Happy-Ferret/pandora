@@ -1,79 +1,80 @@
 title: Glossary
 ---
 
-There are some "key words" in the Pandora.js, the definition of those words may be different with ordinary users understanding, following explanation to help you better understand.
+We bring in some terminologies to define key concepts in pandora.js. What they represent may differ with common understandings. Here we list them with their meanings in the context of pandora.js.
 
 
-## Basic part
+## Application Related Terminologies
 
 ### procfile.js
 
-> Process structure definition file
+> Process model definition file
   
-A description file to defines the process structure of the application.
+A description file used to define the process model of the application.
 
 ### Application
 
 > Application
 
-The meaning of application is not very different with the general situation. 
+An application is a computer program designed to perform a group of coordinated functions, tasks, or activities for the benefit of the user. Here we mean Node.js applications.
 
 ### Fork 
 
 > Based on require('child_process').fork();
 
-Simply start a Node.js application.
+Simply create a new process, which becomes the child process of the caller, and launch the Node.js application in the child process.
 
 ### Cluster 
 
 > Based on require('cluster');
 
-Create a master / worker model process group based on the cluster module.
+A single instance of Node.js runs in a single thread. To take advantage of multi-core systems, users will sometimes want to launch a bunch of Node.js processes to handle the load. The relationships of those Node.js processes can be described via the process model.
 
 ### Service
 
-> Service
+> Functions provided by pandora.js
 
-A Service implementation followed the standard service start and stop interfaces.
+A Service implementation followed the standard pandora service start/stop specifications.
 
-Detail:
+Here is the launching sequences of services:
 
-1. For example, initialize or stop of a lot of the basic middleware SDK.
-2. Start or stop the main program of the application.
-3. A standard object proxy can be created by a service, that can be invoked across the IPC-Hub in other process.
+1. Init and launch basic middlewares.
+2. Start the main program of the application.
+3. Create A standard proxy object proxy for services, thus services can be invoked through the IPC-Hub in other process.
 
 ### Process
 
 > Process
 
-Same meaning.
+An instance of a computer program that is being executed. Processes of different types may execute different programs.
 
-## Metrics part
+## Metrics Related Terminologies
 
 ### EndPoint
 
 > EndPoint
 
-EndPoint is a data aggregation end of every different type, its function is to classify or aggregate the collected data.
+EndPoint is the end entity of the metrics transport tunnel. It collects and aggregates specified types of data.
 
-Example: there are different EndPoints, such as MetricsEndPoint, used to collect the metrics; HealthEndPoint is used to manage the application health status; ErrorEndPoint is used to collect the error logs.
+There are different EndPoints for different types of data:
+- MetricsEndPoint, used to collect and aggregate system metrics; 
+- HealthEndPoint, used to manage the application health information; 
+- ErrorEndPoint, used to collect and aggregate error logs.
 
 ### Indicator
 
 > Indicator
 
-The client part of the EndPoint, each EndPoint relates to the multiple indicators, which is connected by the IPC.
+The client part of the EndPoint. It collects specified types of data, such as a specific error or a specific configuration, etc.
 
-Each Indicator contains specific data values, such as a specific error, a specific configuration object, and so on.
+Each endpoint used to have multiple indicators work for it. They communicate via the IPC.
 
 
 ### Actuator
 
 > Actuator
 
-The actuator has two major functions:
+Actuator is the manager of endpoints. It has two responsibilities:
 
-1. Disclosing the data to the outside. Expose public services, such as the HTTP Service, the CLI Service.
-2. Managing the EndPoint objects
-  
-
+1. Manage endpoints, provides endpoints registry and lookup services.
+2. Expose metrics data, provides different ways to retrieve metrics data for application owners, e.g. HTTP and CLI.
