@@ -1,7 +1,7 @@
 title: Commands
 ---
 
-The pandora.js provides some useful CLI commands, show in below:
+Pandora.js provides CLI commands for application management. They are listed below:
 
 - init
 - start
@@ -18,11 +18,9 @@ The pandora.js provides some useful CLI commands, show in below:
 ```bash
 pandora init <filePath> --name customName
 ```
+Generate a `procfile.js`.
 
-
-Quick generate `procfile.js`.
-
-1. `<filePath>` required, the path of the entry file.
+1. `<filePath>` required, the file path of the entry file.
 2. `--name` optional, the process name for the fork mode.
 
 Example:
@@ -32,48 +30,48 @@ $ pandora init ./app.js
 ? Which type do you like to generate ? (Use arrow keys)
 ❯ fork 
   cluster 
-** The procfile.js was auto generated to location /xx/xx/procfile.js **
+** A newly generated procfile.js could be found under current directory. **
 ```
-## start - Start an application at the background
+## start - Start an application in the background
 
 ```bash
 pandora start [path] --name urAppName --env="NODE_ENV=production" --node-args="--expose-gc"
 ```
 
-The often used command, to start an application at the background.
+Frequently used arguments:
 
-1. `[path]` Required, project directory, by default as the working directory.
-2. `--name=urAppName` Optional, for specify the name of the application, by default as the name in package.json or last part of the working directory path.
-3. `--env="NODE_ENV=production"` Optional, for specify the environmental variables, it can got by process.env.
-4. `--node-args="--expose-gc"` Optional, for specify the Node.js execArgv.
-4. `--args="--a=b"` Optional, for specify the args of the Node.js application.
+1. `[path]` Required, project directory, using the working directory by default.
+2. `--name=urAppName` Optional, to specify the name of current application. Use the name defined in package.json by default or the current directory name.
+3. `--env="NODE_ENV=production"` Optional, to specify the environmental variables. The settings could be retrieved via `process.env` in application.
+4. `--node-args="--expose-gc"` Optional, to specify the runtime arguments.
+5. `--args="--a=b"` Optional, to specify the application arguments.
 
 Example:
 
 ```bash
-# Working dir is  /home/admin/mytaobao/target/mytaobao ( suppose there is no name in package.json )
+# e.g. '/home/admin/mytaobao/target/mytaobao' is the working directory, and name property in package.json is not defined.
 
-pandora start # Start application mytaobao, such as --name=mytaobao
-pandora start . --name mytaobao # Same as above
-pandora start `pwd` # Same as above
+pandora start # Start application, using the default app name via directory name: mytaobao. work the same as --name=mytaobao
+pandora start . --name mytaobao # Work the same as command above
+pandora start `pwd` # Work the same as command above
 ```
 
 ## stop - stop an application
 
-> Notice: Only the application that start by start command can stop by this command
+> Notice: Only applications launched by `start` command can be stopped by this command
 
 ```bash
 pandora stop [appName]
 ```
 
-stop an application.
+This stops an application.
 
-1. `[appName]` Optional, for specify the name of the application, by default as the name in package.json or last part of the working directory path.
+1. `[appName]` Optional, to specify the name of current application.  Use the name defined in package.json by default or the current directory name.
 
 Example:
 
 ```bash
-pandora stop mytaobao # mytaobao is the name that was previously started, and if you did't specified a name, that will automatically get name as well as start.
+pandora stop mytaobao # Here 'mytaobao' is the application name.
 ```
 
 ## restart - Restart an application
@@ -82,26 +80,26 @@ pandora stop mytaobao # mytaobao is the name that was previously started, and if
 pandora restart [appName]
 ```
 
-Equivalent to `pandora stop` and then `pandora start`.
+Equals to `pandora stop` and then `pandora start`.
 
 
-1. `[appName]` Optional, for specify the name of the application, by default as the name in package.json or last part of the working directory path.
+1. `[appName]` Optional, to specify the name of current application.  Use the name defined in package.json by default or the current directory name.
 
 Example:
 
 ```bash
-pandora restart mytaobao # mytaobao is the name that was previously started, and if you did't specified a name, that will automatically get name as well as start.
+pandora restart mytaobao # Here 'mytaobao' is the application name.
 ```
 
 ## list - List all running applications
 
-> Notice: The dev command will not start the daemon process, this command cannot get the information of it.
+> Notice: applications launched via `pandora dev` is not guarded by daemon process, thus won't be listed by this command.
 
 ```bash
 pandora list
 ```
 
-List all applications, example as below:
+List all running applications:
 
 ![list](https://img.alicdn.com/tfs/TB107mPeOqAXuNjy1XdXXaYcVXa-2646-330.png) 
 
@@ -112,9 +110,9 @@ List all applications, example as below:
 pandora log [appName] --follow --lines --full --daemon
 ```
 
-1. `[appName]` Optional, for specify the name of the application, by default as the name in package.json or last part of the working directory path.
-2. `--follow` Optional, alias as  `-f`, just like `tail -f`.
-3. `--lines` Optional, alias as `-l`, output the last few lines, by default as 50.
+1. `[appName]` Optional, to specify the name of current application.  Use the name defined in package.json by default or the current directory name.
+2. `--follow` Optional, alias as  `-f`, work the same as `tail -f`.
+3. `--lines` Optional, alias as `-l`, output the last few lines of logs, by default display last 50 lines.
 4. `--full` Optional, output all logs.
 5. `--daemon` Optional, output logs of the daemon process.
 
@@ -129,27 +127,25 @@ pandora ps <appName>
 
 ## exit - Quit the Pandora.js
 
-Complete exit of the Pandora.js process, and stop all running applications.
+Stop all running applications and quit pandora.js daemon process.
 
 ```bash
 pandora exit
 ```
 
-## dev - Start an application at front
+## dev - Start an application in the foreground
 
-> Notice: this command will not start the daemon process, the list command cannot get the information of it.
+> Notice: `pandora dev` would not launch the daemon process, thus the launched application won't be listed in the output of `pandora list`.
 
 ```bash
 pandora dev [path] --name urAppName --env="NODE_ENV=production" --node-args="--expose-gc"
 ```
 
-Start an application at front without the daemon process, logs output to stdout directly.
-It is mostly used for local debugging, the parameters similar with the start command.
+Start an application in the foreground, without the guardianship of daemon process, logs output to stdout directly.
+It is mostly used for local development and debugging. It accepts the same parameters as the `start` command.
 
-1. `[path]` Required, project directory, by default as the working directory.
-2. `--name=urAppName` Optional, for specify the name of the application, by default as the name in package.json or last part of the working directory path.
-3. `--env="NODE_ENV=production"` Optional, for specify the environmental variables, can got by process.env.
-4. `--node-args="--expose-gc"` Optional, for specify the Node.js execArgv.
-4. `--args="--a=b"` Optional, for specify the args of the Node.js application.
-
-
+1. `[path]` Required, project directory, using the working directory by default.
+2. `--name=urAppName` Optional, to specify the name of current application. Use the name defined in package.json by default or the current directory name.
+3. `--env="NODE_ENV=production"` Optional, to specify the environmental variables. The settings could be retrieved via `process.env` in application.
+4. `--node-args="--expose-gc"` Optional, to specify the runtime arguments.
+5. `--args="--a=b"` Optional, to specify the application arguments.
